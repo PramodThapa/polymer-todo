@@ -1,0 +1,14 @@
+{
+  "name": "to-do",
+  "version": "1.0.0",
+  "description": "'Todo application with polymer.'",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pramod Thapa",
+  "license": "MIT",
+  "dependencies": {
+    "@polymer/polymer": "^3.4.1"
+  }
+}
