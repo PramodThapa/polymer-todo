@@ -103,5 +103,5 @@ class MyElement extends PolymerElement {
   }
 }
 
-//comment
+
 customElements.define("my-element", MyElement);
