@@ -1,6 +1,6 @@
-import { PolymerElement, html } from "@polymer/polymer";
 import "@polymer/polymer/lib/elements/dom-if";
 import "@polymer/polymer/lib/elements/dom-repeat";
+import { PolymerElement, html } from "@polymer/polymer";
 
 import "./input-element.js";
 
@@ -11,6 +11,7 @@ class MyElement extends PolymerElement {
         type: String,
         value: "Hello",
       },
+      
       todoList: {
         type: Array,
         notify: true,
@@ -60,15 +61,13 @@ class MyElement extends PolymerElement {
 
   onCheckBoxClick(e){
     const todoID = e.target.name;
-    this.todoList = this.todoList.map((list)=>{
-      if(todoID === list.id){
-        list.completed = !list.completed;
-        return list
+    this.todoList = this.todoList.map((todo)=>{
+      if(todoID === todo.id){
+        return {...todo,completed:!todo.completed}
       }else{
-        return list
+        return todo
       }
     })
-    console.log(this.todoList)
   }
 
   

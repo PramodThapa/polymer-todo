@@ -1,5 +1,5 @@
-import { PolymerElement, html } from "@polymer/polymer";
 import { idGenerator } from "../utils/id-generator.js";
+import { PolymerElement, html } from "@polymer/polymer";
 
 class InputElement extends PolymerElement {
   static get properties() {
