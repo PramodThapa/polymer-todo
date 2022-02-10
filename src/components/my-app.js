@@ -71,6 +71,8 @@ class MyElement extends PolymerElement {
     console.log(this.todoList)
   }
 
+  
+
   static get template() {
     return html`
       <style>
@@ -96,7 +98,7 @@ class MyElement extends PolymerElement {
                 Delete
               </button>
             </span>
-            <span><input type ='checkbox' name ='[[item.id]]' on-change='onCheckBoxClick'></span>
+            <span><input type ='checkbox' name ='[[item.id]]' checked ="{{item.completed}}" on-change='onCheckBoxClick'></span>
         </div>
       </template>
     `;
