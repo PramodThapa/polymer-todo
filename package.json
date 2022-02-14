@@ -9,6 +9,8 @@
   "author": "Pramod Thapa",
   "license": "MIT",
   "dependencies": {
-    "@polymer/polymer": "^3.4.1"
+    "@firefly-elements/polymerfire": "^0.5.15",
+    "@polymer/polymer": "^3.4.1",
+    "firebase": "^9.6.6"
   }
 }
