@@ -2,90 +2,111 @@ import "@polymer/polymer/lib/elements/dom-if";
 import "@polymer/polymer/lib/elements/dom-repeat";
 import { PolymerElement, html } from "@polymer/polymer";
 
-import "@firefly-elements/polymerfire/firebase-app";
-import "@firefly-elements/polymerfire/firebase-document";
+import {
+  getTodoList,
+  deleteTodo,
+  updateTodo,
+} from "../services/todoService.js";
 
 import "./input-element.js";
 
 class MyElement extends PolymerElement {
+  /**
+   * Static function that sets the props for the component.
+   *
+   * @returns {object} || Object of proporties of component with respective key and value.
+   */
   static get properties() {
     return {
+      /**
+       * Text of the input field to add todo.
+       * 
+       * Binded with child element (input-element.js)
+       *
+       * @type {String}
+       */
       inputText: {
         type: String,
-        value: "Hello",
+        value: "",
       },
 
+      /**
+       * List of todos.
+       * 
+       * Binded with child element (input-element.js)
+       * 
+       * @type {Array}
+       */
       todoList: {
         type: Array,
         notify: true,
         value() {
-          return [
-            {
-              id: "0",
-              task: "Task number 1",
-              completed: true,
-            },
-            {
-              id: "1",
-              task: "Task number 2",
-              completed: false,
-            },
-            {
-              id: "2",
-              task: "Task number 3",
-              completed: true,
-            },
-            {
-              id: "3",
-              task: "Task number 4",
-              completed: false,
-            },
-          ];
+          return [];
         },
         observer: (todoList) => {
-          //console.log(todoList);
-        },
-      },
-      todo: {
-        type: Array,
-        notify: true,
-        value() {
-          return [
-            {
-              id: "1",
-              task: "Local Task",
-              completed: false,
-            },
-          ];
-        },
-        observer: (oldValue, newValue) => {
-          console.log(oldValue, newValue);
         },
       },
     };
   }
 
+  /**
+   * Use for one-time configuration of your component after local DOM is initialized.
+   */
+  ready() {
+    super.ready();
+    getTodoList().then((todos) => {
+      this.todoList = todos;
+      console.log(this.todoList);
+    });
+  }
+
+  /**
+   * Function to check if todo is completed or not.
+   * 
+   * @param {*} item || todo item
+   * 
+   * @returns {Boolean}
+   */
   isCompleted(item) {
     return item.completed === false;
   }
 
+  /**
+   * Function to execute when delete button is clicked
+   * 
+   * @param {*} e || event
+   */
   onDeleteButtonClick(e) {
     const todoID = e.target.dataset.item;
-    this.todoList = this.todoList.filter((list) => list.id != todoID);
+    deleteTodo(todoID).then(() => {
+      getTodoList().then((todos) => {
+        this.todoList = todos;
+      });
+    });
   }
 
+  /**
+   * Function to handle css class 
+   * 
+   * @param {*} completed || todo completed status
+   * 
+   * @returns {String} || name of css class
+   */
   getClasses(completed) {
     if (completed) return "completed";
   }
 
+  /**
+   * Function executed when checkbox is clicked
+   * 
+   * @param {*} e || event 
+   */
   onCheckBoxClick(e) {
     const todoID = e.target.name;
-    this.todoList = this.todoList.map((todo) => {
-      if (todoID === todo.id) {
-        return { ...todo, completed: !todo.completed };
-      } else {
-        return todo;
-      }
+    updateTodo(todoID).then(() => {
+      getTodoList().then((todos) => {
+        this.todoList = todos;
+      });
     });
   }
 
@@ -99,19 +120,6 @@ class MyElement extends PolymerElement {
           text-decoration: line-through;
         }
       </style>
-
-      <firebase-app
-        auth-domain="polymer-todo-42aa3.firebaseapp.com"
-        api-key="AIzaSyAR0Bo7tnkvT7moG0QgtBgepCaU-ly2IQc"
-        storage-bucket="polymer-todo-42aa3.appspot.com"
-        messaging-sender-id="1003234327453"
-        projectId="polymer-todo-42aa3"
-        appId="1:1003234327453:web:a1c9aafc19da705bb14d74"
-        measurementId="G-ECMKX89VWY"
-      ></firebase-app>
-
-      <firebase-document path="/todo" data="{{todo}}">
-      </firebase-document>
 
       <input-element
         id="input"
@@ -142,4 +150,7 @@ class MyElement extends PolymerElement {
   }
 }
 
+/**
+ * Defining and register component as 'my-element'
+ */
 customElements.define("my-element", MyElement);
